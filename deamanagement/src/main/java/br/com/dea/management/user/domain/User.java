@@ -3,7 +3,7 @@ package br.com.dea.management.user.domain;
 import jakarta.persistence.*;
 
 @Entity
-@NamedQuery(name = "myQuery", query = "SELECT u FROM User WHERE u.name = :name")
+@NamedQuery(name = "myQuery", query = "SELECT u FROM User u WHERE u.name = :name")
 public class User {
 
     @Id
