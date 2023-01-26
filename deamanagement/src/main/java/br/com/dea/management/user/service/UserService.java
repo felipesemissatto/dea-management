@@ -1,9 +1,12 @@
 package br.com.dea.management.user.service;
 
 import br.com.dea.management.exceptions.NotFoundException;
+import br.com.dea.management.student.domain.Student;
 import br.com.dea.management.user.domain.User;
 import br.com.dea.management.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,5 +45,9 @@ public class UserService {
     public User findUserByLinkedin(String linkedin) {
         Optional<User> user = this.userRepository.findByLinkedin(linkedin);
         return user.orElseThrow(() -> new NotFoundException(User.class, linkedin));
+    }
+
+    public Page<User> findAllStudentsPaginated(Integer page, Integer pageSize) {
+        return this.userRepository.findAllPaginated(PageRequest.of(page, pageSize));
     }
 }
