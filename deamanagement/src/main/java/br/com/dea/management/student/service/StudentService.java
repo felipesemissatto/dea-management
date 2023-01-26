@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentService {
@@ -21,5 +22,9 @@ public class StudentService {
 
     public Page<Student> findAllStudentsPaginated(Integer page, Integer pageSize) {
         return this.studentRepository.findAllPaginated(PageRequest.of(page, pageSize));
+    }
+
+    public Optional<Student> findStudentById(Long id) {
+        return this.studentRepository.findStudentByUserId(id);
     }
 }

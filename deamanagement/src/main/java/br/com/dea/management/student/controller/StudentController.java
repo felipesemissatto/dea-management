@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class StudentController {
@@ -34,5 +35,10 @@ public class StudentController {
         Page<StudentDto> students = studentsPaged.map(student -> StudentDto.fromStudent(student));
         return students;
 
+    }
+
+    @GetMapping("/student/id")
+    public Optional<Student> getStudentById(@RequestParam Long id) {
+        return this.studentService.findStudentById(id);
     }
 }
