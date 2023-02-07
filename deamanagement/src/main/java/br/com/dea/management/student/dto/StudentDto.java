@@ -6,6 +6,14 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.*;
+
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class StudentDto {
 
     private String name;
@@ -32,53 +40,5 @@ public class StudentDto {
         studentDto.setFinishDate(student.getFinishDate());
 
         return studentDto;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getLinkedin() {
-        return linkedin;
-    }
-
-    public void setLinkedin(String linkedin) {
-        this.linkedin = linkedin;
-    }
-
-    public String getUniversity() {
-        return university;
-    }
-
-    public void setUniversity(String university) {
-        this.university = university;
-    }
-
-    public String getGraduation() {
-        return graduation;
-    }
-
-    public void setGraduation(String graduation) {
-        this.graduation = graduation;
-    }
-
-    public LocalDate getFinishDate() {
-        return finishDate;
-    }
-
-    public void setFinishDate(LocalDate finishDate) {
-        this.finishDate = finishDate;
     }
 }
