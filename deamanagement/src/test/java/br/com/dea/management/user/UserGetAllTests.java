@@ -1,8 +1,5 @@
 package br.com.dea.management.user;
 
-import br.com.dea.management.student.StudentGetAllTests;
-import br.com.dea.management.student.domain.Student;
-import br.com.dea.management.student.repository.StudentRepository;
 import br.com.dea.management.user.domain.User;
 import br.com.dea.management.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
