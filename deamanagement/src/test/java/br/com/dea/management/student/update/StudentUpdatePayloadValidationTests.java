@@ -15,6 +15,7 @@ import java.nio.charset.Charset;
 
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -71,5 +72,27 @@ public class StudentUpdatePayloadValidationTests {
                 .andExpect(jsonPath("$.message").exists())
                 .andExpect(jsonPath("$.details").isArray())
                 .andExpect(jsonPath("$.details", hasSize(1)));
+    }
+
+    @Test
+    void whenPayloadHasNotValidEmail_thenReturn400AndTheErrors() throws Exception {
+        String payload = "{" +
+                "\"name\": \"name\"," +
+                "\"email\": \"email\"," +
+                "\"linkedin\": \"linkedin\"," +
+                "\"university\": \"university\"," +
+                "\"graduation\": \"graduation\"," +
+                "\"password\": \"password\"," +
+                "\"finishDate\": \"2023-02-27\"" +
+                "}";
+        mockMvc.perform(post("/student")
+                        .contentType(APPLICATION_JSON_UTF8).content(payload))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.details").isArray())
+                .andExpect(jsonPath("$.details", hasSize(1)))
+                .andExpect(jsonPath("$.details[*].field", hasItem("email")))
+                .andExpect(jsonPath("$.details[*].errorMessage", hasItem("must be a well-formed email address")));
     }
 }
