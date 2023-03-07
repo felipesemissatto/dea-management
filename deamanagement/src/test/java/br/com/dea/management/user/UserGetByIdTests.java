@@ -1,8 +1,5 @@
 package br.com.dea.management.user;
 
-import br.com.dea.management.student.StudentGetByIdTests;
-import br.com.dea.management.student.domain.Student;
-import br.com.dea.management.student.repository.StudentRepository;
 import br.com.dea.management.user.domain.User;
 import br.com.dea.management.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.time.LocalDate;
-import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
