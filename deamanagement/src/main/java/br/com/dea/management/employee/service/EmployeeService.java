@@ -26,7 +26,7 @@ public class EmployeeService {
     private EmployeeRepository employeeRepository;
     @Autowired
     private PositionRepository positionRepository;
-    
+
     public List<Employee> findAllEmployees() {
         return this.employeeRepository.findAll();
     }
