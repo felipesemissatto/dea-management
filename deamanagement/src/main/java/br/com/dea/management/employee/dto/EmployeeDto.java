@@ -1,8 +1,8 @@
 package br.com.dea.management.employee.dto;
 import br.com.dea.management.employee.EmployeeType;
 import br.com.dea.management.employee.domain.Employee;
-//import br.com.dea.management.position.domain.Position;
-//import br.com.dea.management.position.dto.PositionDto;
+import br.com.dea.management.position.domain.Position;
+import br.com.dea.management.position.dto.PositionDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
@@ -22,8 +22,8 @@ public class EmployeeDto {
     private String email;
     private String linkedin;
     private EmployeeType employeeType;
-//    @JsonProperty("position")
-//    private PositionDto positionDto;
+    @JsonProperty("position")
+    private PositionDto positionDto;
 
     public String getName() {
         return name;
@@ -44,9 +44,9 @@ public class EmployeeDto {
         employeeDto.setLinkedin(employee.getUser().getLinkedin());
         employeeDto.setEmployeeType(employee.getEmployeeType());
 
-//        Position position = employee.getPosition();
-//
-//        employeeDto.setPositionDto(new PositionDto(position.getId(), position.getDescription(), position.getSeniority()));
+        Position position = employee.getPosition();
+
+        employeeDto.setPositionDto(new PositionDto(position.getId(), position.getDescription(), position.getSeniority()));
 
         return employeeDto;
     }
