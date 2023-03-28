@@ -1,6 +1,9 @@
 package br.com.dea.management.academyclass.create;
 
 import br.com.dea.management.academyclass.repository.AcademyClassRepository;
+import br.com.dea.management.employee.EmployeeTestUtils;
+import br.com.dea.management.employee.domain.Employee;
+import br.com.dea.management.employee.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,11 @@ public class AcademyClassCreationPayloadValidationTests {
 
     @Autowired
     private AcademyClassRepository academyClassRepository;
+    @Autowired
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private EmployeeTestUtils employeeTestUtils;
 
     public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
@@ -51,5 +59,25 @@ public class AcademyClassCreationPayloadValidationTests {
                 .andExpect(jsonPath("$.details[*].field", hasItem("instructorId")))
                 .andExpect(jsonPath("$.details[*].errorMessage", hasItem("Instructor id could not be null")));
 
+    }
+
+    @Test
+    void whenPayloadContainsInvalidInstructorId_thenReturn404AndTheError() throws Exception {
+        this.academyClassRepository.deleteAll();
+        this.employeeRepository.deleteAll();
+
+        String payload = "{" +
+                "\"startDate\": \"2023-02-27\"," +
+                "\"endDate\": \"2024-02-27\"," +
+                "\"instructorId\": " + 1 +
+                "}";
+
+        mockMvc.perform(post("/academy-class")
+                        .contentType(APPLICATION_JSON_UTF8).content(payload))
+                .andExpect(status().isNotFound())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.details").isArray())
+                .andExpect(jsonPath("$.details", hasSize(1)));
     }
 }
