@@ -39,6 +39,7 @@ public class AcademyClassService {
                 .orElseThrow(() -> new NotFoundException(AcademyClass.class, createAcademyClassRequestDto.getInstructorId()));
 
         AcademyClass academyClass = AcademyClass.builder()
+                .classType(createAcademyClassRequestDto.getClassType())
                 .startDate(createAcademyClassRequestDto.getStartDate())
                 .endDate(createAcademyClassRequestDto.getEndDate())
                 .instructor(instructor)
