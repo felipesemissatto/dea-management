@@ -17,8 +17,8 @@ public class UpdateAcademyClassRequestDto {
     private LocalDate startDate;
     @NotNull(message = "End date could not be null")
     private LocalDate endDate;
+    @NotNull(message = "Class type id could not be null")
+    private ClassType classType;
     @NotNull(message = "Instructor id could not be null")
     private Long instructorId;
-    @NotNull
-    private ClassType classType;
 }
