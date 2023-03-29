@@ -56,6 +56,7 @@ public class AcademyClassService {
         Employee instructor = this.employeeRepository.findById(updateAcademyClasRequestDto.getInstructorId())
                 .orElseThrow(() -> new NotFoundException(AcademyClass.class, updateAcademyClasRequestDto.getInstructorId()));
 
+        academyClass.setClassType(updateAcademyClasRequestDto.getClassType());
         academyClass.setStartDate(updateAcademyClasRequestDto.getStartDate());
         academyClass.setEndDate(updateAcademyClasRequestDto.getEndDate());
         academyClass.setInstructor(instructor);

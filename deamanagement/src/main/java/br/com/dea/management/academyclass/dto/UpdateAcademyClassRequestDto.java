@@ -1,5 +1,6 @@
 package br.com.dea.management.academyclass.dto;
 
+import br.com.dea.management.academyclass.ClassType;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -18,4 +19,6 @@ public class UpdateAcademyClassRequestDto {
     private LocalDate endDate;
     @NotNull(message = "Instructor id could not be null")
     private Long instructorId;
+    @NotNull
+    private ClassType classType;
 }
