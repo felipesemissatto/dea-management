@@ -54,13 +54,15 @@ public class AcademyClassUpdatePayloadValidationTests {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message").exists())
                 .andExpect(jsonPath("$.details").isArray())
-                .andExpect(jsonPath("$.details", hasSize(3)))
+                .andExpect(jsonPath("$.details", hasSize(4)))
                 .andExpect(jsonPath("$.details[*].field", hasItem("startDate")))
                 .andExpect(jsonPath("$.details[*].errorMessage", hasItem("Start date could not be null")))
                 .andExpect(jsonPath("$.details[*].field", hasItem("endDate")))
                 .andExpect(jsonPath("$.details[*].errorMessage", hasItem("End date could not be null")))
                 .andExpect(jsonPath("$.details[*].field", hasItem("instructorId")))
-                .andExpect(jsonPath("$.details[*].errorMessage", hasItem("Instructor id could not be null")));
+                .andExpect(jsonPath("$.details[*].errorMessage", hasItem("Instructor id could not be null")))
+                .andExpect(jsonPath("$.details[*].field", hasItem("classType")))
+                .andExpect(jsonPath("$.details[*].errorMessage", hasItem("Class type id could not be null")));
     }
 
     @Test
@@ -70,6 +72,7 @@ public class AcademyClassUpdatePayloadValidationTests {
         String payload = "{" +
                 "\"startDate\": \"2023-02-27\"," +
                 "\"endDate\": \"2024-02-27\"," +
+                "\"classType\": \"DESIGN\"," +
                 "\"instructorId\": " + 1 +
                 "}";
         mockMvc.perform(put("/academy-class/1")
@@ -92,6 +95,7 @@ public class AcademyClassUpdatePayloadValidationTests {
         String payload = "{" +
                 "\"startDate\": \"2023-02-27\"," +
                 "\"endDate\": \"2024-02-27\"," +
+                "\"classType\": \"DESIGN\"," +
                 "\"instructorId\": -1" +
                 "}";
         mockMvc.perform(put("/academy-class/" + academyClass.getId())

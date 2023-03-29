@@ -62,6 +62,7 @@ public class AcademyClassUpdateSuccessCaseTests {
         String payload = "{" +
                 "\"startDate\": \"2023-02-27\"," +
                 "\"endDate\": \"2024-02-27\"," +
+                "\"classType\": \"DEVELOPER\"," +
                 "\"instructorId\": " + instructor.getId() +
                 "}";
 

@@ -1,6 +1,7 @@
 package br.com.dea.management.academyclass.create;
 
 import br.com.dea.management.academyclass.AcademyTestUtils;
+import br.com.dea.management.academyclass.ClassType;
 import br.com.dea.management.academyclass.domain.AcademyClass;
 import br.com.dea.management.academyclass.repository.AcademyClassRepository;
 import br.com.dea.management.employee.EmployeeTestUtils;
@@ -58,6 +59,7 @@ public class AcademyClassCreationSuccessCaseTests {
         String payload = "{" +
                 "\"startDate\": \"2023-02-27\"," +
                 "\"endDate\": \"2024-02-27\"," +
+                "\"classType\": \"DESIGN\"," +
                 "\"instructorId\": " + instructor.getId() +
                 "}";
         mockMvc.perform(post("/academy-class")
@@ -68,6 +70,7 @@ public class AcademyClassCreationSuccessCaseTests {
 
         assertThat(academyClass.getStartDate()).isEqualTo("2023-02-27");
         assertThat(academyClass.getEndDate()).isEqualTo("2024-02-27");
+        assertThat(academyClass.getClassType()).isEqualTo(ClassType.DESIGN);
         assertThat(academyClass.getInstructor().getId()).isEqualTo(instructor.getId());
         assertThat(academyClass.getInstructor().getClass()).isEqualTo(instructor.getClass());
         assertThat(academyClass.getInstructor().getUser().getId()).isEqualTo(instructor.getUser().getId());
