@@ -3,7 +3,10 @@ package br.com.dea.management.academyclass.controller;
 import br.com.dea.management.academyclass.domain.AcademyClass;
 import br.com.dea.management.academyclass.dto.AcademyClassDto;
 import br.com.dea.management.academyclass.dto.CreateAcademyClassRequestDto;
+import br.com.dea.management.academyclass.dto.UpdateAcademyClassRequestDto;
 import br.com.dea.management.academyclass.service.AcademyClassService;
+import br.com.dea.management.employee.domain.Employee;
+import br.com.dea.management.employee.dto.UpdateEmployeeRequestDto;
 import br.com.dea.management.student.domain.Student;
 import br.com.dea.management.student.dto.CreateStudentRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -77,5 +80,21 @@ public class AcademyClassController {
         AcademyClass academyClass = academyClassService.createAcademyClass(createAcademyClassRequestDto);
 
         log.info(String.format("Academy Class created successfully : id : %s", academyClass.getId()));
+    }
+
+    @Operation(summary = "Update an Academy Class")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation"),
+            @ApiResponse(responseCode = "400", description = "Payload not valid"),
+            @ApiResponse(responseCode = "404", description = "Academy class or instructor not found"),
+            @ApiResponse(responseCode = "500", description = "Error updating academy class"),
+    })
+    @PutMapping("/academy-class/{academyClassId}")
+    public void updateAcademyClass(@PathVariable Long academyClassId, @Valid @RequestBody UpdateAcademyClassRequestDto updateAcademyClasRequestDto) {
+        log.info(String.format("Updating Academy Class : Payload : %s", updateAcademyClasRequestDto));
+
+        AcademyClass academyClass = academyClassService.updateAcademyClass(academyClassId, updateAcademyClasRequestDto);
+
+        log.info(String.format("Academy Class updated successfully : id : %s", academyClass.getId()));
     }
 }

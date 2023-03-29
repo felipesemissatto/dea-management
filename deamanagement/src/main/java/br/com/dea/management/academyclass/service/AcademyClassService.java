@@ -2,12 +2,15 @@ package br.com.dea.management.academyclass.service;
 
 import br.com.dea.management.academyclass.domain.AcademyClass;
 import br.com.dea.management.academyclass.dto.CreateAcademyClassRequestDto;
+import br.com.dea.management.academyclass.dto.UpdateAcademyClassRequestDto;
 import br.com.dea.management.academyclass.repository.AcademyClassRepository;
 import br.com.dea.management.employee.domain.Employee;
+import br.com.dea.management.employee.dto.UpdateEmployeeRequestDto;
 import br.com.dea.management.employee.repository.EmployeeRepository;
 import br.com.dea.management.exceptions.NotFoundException;
 import br.com.dea.management.position.domain.Position;
 import br.com.dea.management.position.repository.PositionRepository;
+import br.com.dea.management.user.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,6 +43,21 @@ public class AcademyClassService {
                 .endDate(createAcademyClassRequestDto.getEndDate())
                 .instructor(instructor)
                 .build();
+
+        return this.academyClassRepository.save(academyClass);
+    }
+
+    public AcademyClass updateAcademyClass(Long academyClassId, UpdateAcademyClassRequestDto updateAcademyClasRequestDto) {
+
+        AcademyClass academyClass = this.academyClassRepository.findById(academyClassId)
+                .orElseThrow(() -> new NotFoundException(AcademyClass.class, updateAcademyClasRequestDto.getInstructorId()));
+
+        Employee instructor = this.employeeRepository.findById(updateAcademyClasRequestDto.getInstructorId())
+                .orElseThrow(() -> new NotFoundException(AcademyClass.class, updateAcademyClasRequestDto.getInstructorId()));
+
+        academyClass.setStartDate(updateAcademyClasRequestDto.getStartDate());
+        academyClass.setEndDate(updateAcademyClasRequestDto.getEndDate());
+        academyClass.setInstructor(instructor);
 
         return this.academyClassRepository.save(academyClass);
     }
