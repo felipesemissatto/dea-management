@@ -1,4 +1,4 @@
-package br.com.dea.management.project;
+package br.com.dea.management.project.domain;
 
 import br.com.dea.management.employee.domain.Employee;
 import jakarta.persistence.*;
