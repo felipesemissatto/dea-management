@@ -32,6 +32,7 @@ public class Project {
     private String client;
 
     @Column
+    @JoinColumn(name = "external_product_manager")
     private String externalProductManager;
 
     @ManyToOne

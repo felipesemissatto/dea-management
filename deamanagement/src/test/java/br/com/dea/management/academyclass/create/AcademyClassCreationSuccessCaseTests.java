@@ -49,7 +49,7 @@ public class AcademyClassCreationSuccessCaseTests {
             MediaType.APPLICATION_JSON.getSubtype(), Charset.forName("utf8"));
 
     @Test
-    void whenRequestingEmployeeCreationWithAValidPayload_thenCreateAEmployeeSuccessfully() throws Exception {
+    void whenRequestingAcademyClassCreationWithAValidPayload_thenCreateAnAcademyClassSuccessfully() throws Exception {
         this.academyClassRepository.deleteAll();
         this.employeeRepository.deleteAll();
 
