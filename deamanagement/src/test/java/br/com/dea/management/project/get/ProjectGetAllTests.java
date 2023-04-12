@@ -70,4 +70,43 @@ public class ProjectGetAllTests {
                 .andExpect(jsonPath("$.content[0].productOwner.name", is("name 0")))
                 .andExpect(jsonPath("$.content[0].scrumMaster.name", is("name 1")));
     }
+
+    @Test
+    void whenRequestingProjectListAndPageQueryParamIsInvalid_thenReturnBadRequestError() throws Exception {
+        mockMvc.perform(get("/project?page=xx&pageSize=4"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.details").isArray())
+                .andExpect(jsonPath("$.details", hasSize(1)));
+    }
+
+    @Test
+    void whenRequestingProjectListAndPageQueryParamIsMissing_thenReturnBadRequestError() throws Exception {
+        mockMvc.perform(get("/project?pageSize=4"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.details").isArray())
+                .andExpect(jsonPath("$.details", hasSize(1)));
+    }
+
+    @Test
+    void whenRequestingAProjectListAndPageSizeQueryParamIsInvalid_thenReturnBadRequestError() throws Exception {
+        mockMvc.perform(get("/project?pageSize=xx&page=4"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.details").isArray())
+                .andExpect(jsonPath("$.details", hasSize(1)));
+    }
+
+    @Test
+    void whenRequestingProjectListAndPageSizeQueryParamIsMissing_thenReturnBadRequestError() throws Exception {
+        mockMvc.perform(get("/project?page=0"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.details").isArray());
+    }
 }
