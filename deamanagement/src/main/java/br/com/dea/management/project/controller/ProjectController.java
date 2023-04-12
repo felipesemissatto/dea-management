@@ -1,5 +1,6 @@
 package br.com.dea.management.project.controller;
 
+import br.com.dea.management.academyclass.dto.AcademyClassDto;
 import br.com.dea.management.project.domain.Project;
 import br.com.dea.management.project.dto.ProjectDto;
 import br.com.dea.management.project.service.ProjectService;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,5 +42,24 @@ public class ProjectController {
         log.info(String.format("Projects loaded successfully : Project : %s : pageSize", projects.getContent().size()));
 
         return projects;
+    }
+
+    @Operation(summary = "Load the project by ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation"),
+            @ApiResponse(responseCode = "400", description = "Project Id invalid"),
+            @ApiResponse(responseCode = "404", description = "Project Not found"),
+            @ApiResponse(responseCode = "500", description = "Error fetching academyClass list"),
+    })
+    @GetMapping("/project/{id}")
+    public ProjectDto getProject(@PathVariable Long id) {
+
+        log.info(String.format("Fetching project by id : Id : %s", id));
+
+        ProjectDto project = ProjectDto.fromProject(this.projectService.findProjectById(id));
+
+        log.info(String.format("Project loaded successfully : Project : %s", project));
+
+        return project;
     }
 }

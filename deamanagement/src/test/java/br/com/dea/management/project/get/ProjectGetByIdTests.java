@@ -1,11 +1,9 @@
-package br.com.dea.management.academyclass.get;
+package br.com.dea.management.project.get;
 
-import br.com.dea.management.academyclass.AcademyTestUtils;
-import br.com.dea.management.academyclass.ClassType;
-import br.com.dea.management.academyclass.domain.AcademyClass;
-import br.com.dea.management.academyclass.repository.AcademyClassRepository;
 import br.com.dea.management.employee.repository.EmployeeRepository;
-import br.com.dea.management.student.repository.StudentRepository;
+import br.com.dea.management.project.ProjectTestUtil;
+import br.com.dea.management.project.domain.Project;
+import br.com.dea.management.project.repository.ProjectRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,71 +16,64 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDate;
-import java.time.Month;
-
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @Slf4j
-public class AcademyClassGetByIdTests {
-
+public class ProjectGetByIdTests {
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
-    private AcademyClassRepository academyClassRepository;
+    private ProjectRepository projectRepository;
 
     @Autowired
     private EmployeeRepository employeeRepository;
 
     @Autowired
-    private StudentRepository studentRepository;
-
-    @Autowired
-    private AcademyTestUtils academyClassTestUtils;
+    private ProjectTestUtil projectTestUtil;
 
     @BeforeEach
     void beforeEach() {
-        log.info("Before each test in " + AcademyClassGetByIdTests.class.getSimpleName());
+        log.info("Before each test in " + ProjectGetAllTests.class.getSimpleName());
     }
 
     @BeforeAll
     void beforeSuiteTest() {
-        log.info("Before all tests in " + AcademyClassGetByIdTests.class.getSimpleName());
+        log.info("Before all tests in " + ProjectGetAllTests.class.getSimpleName());
     }
 
     @Test
-    void whenRequestingAnExistentAcademyClassById_thenReturnTheAcademyClassSuccessfully() throws Exception {
-        this.academyClassRepository.deleteAll();
-        this.studentRepository.deleteAll();
+    void whenRequestingAnExistentProjectById_thenReturnTheProjectSuccessfully() throws Exception {
+        this.projectRepository.deleteAll();
         this.employeeRepository.deleteAll();
 
-        LocalDate startDate = LocalDate.of(2023, Month.JANUARY, 1);
-        LocalDate endDate = LocalDate.of(2024, Month.DECEMBER, 20);
-        this.academyClassTestUtils.createFakeClass(1, startDate, endDate, ClassType.DEVELOPER);
+        this.projectTestUtil.createFakeProject(1);
+        Project project = this.projectRepository.findAll().get(0);
 
-        AcademyClass academyClass = this.academyClassRepository.findAll().get(0);
-
-        mockMvc.perform(get("/academy-class/" + academyClass.getId()))
+        this.mockMvc.perform(get("/project/" + project.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.startDate", is("2023-01-01")))
-                .andExpect(jsonPath("$.endDate", is("2024-12-20")))
-                .andExpect(jsonPath("$.instructor.name", is("name 0")));
-
+                .andExpect(jsonPath("$.name", is(project.getName())))
+                .andExpect(jsonPath("$.client", is(project.getClient())))
+                .andExpect(jsonPath("$.startDate", is(project.getStartDate().toString())))
+                .andExpect(jsonPath("$.endDate", is(project.getEndDate().toString())))
+                .andExpect(jsonPath("$.externalProductManager", is(project.getExternalProductManager())))
+                .andExpect(jsonPath("$.productOwner.name", is(project.getProductOwner().getUser().getName())))
+                .andExpect(jsonPath("$.scrumMaster.name", is(project.getScrumMaster().getUser().getName())));
     }
 
     @Test
-    void whenRequestingAcademyClassByIdAndIdIsNotANumber_thenReturnTheBadRequestError() throws Exception {
+    void whenRequestingProjectByIdAndIdIsNotANumber_thenReturnTheBadRequestError() throws Exception {
 
-        mockMvc.perform(get("/academy-class/xx"))
+        mockMvc.perform(get("/project/xx"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message").exists())
@@ -91,9 +82,10 @@ public class AcademyClassGetByIdTests {
     }
 
     @Test
-    void whenRequestingAnNonExistentAcademyClassById_thenReturnTheNotFoundError() throws Exception {
+    void whenRequestingAnNonExistentProjectById_thenReturnTheNotFoundError() throws Exception {
+        this.projectRepository.deleteAll();
 
-        mockMvc.perform(get("/academy-class/5000"))
+        mockMvc.perform(get("/project/5000"))
                 .andExpect(status().isNotFound())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message").exists())
@@ -101,5 +93,4 @@ public class AcademyClassGetByIdTests {
                 .andExpect(jsonPath("$.details", hasSize(1)));
 
     }
-
 }

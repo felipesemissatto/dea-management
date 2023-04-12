@@ -1,5 +1,7 @@
 package br.com.dea.management.project.service;
 
+import br.com.dea.management.academyclass.domain.AcademyClass;
+import br.com.dea.management.exceptions.NotFoundException;
 import br.com.dea.management.project.domain.Project;
 import br.com.dea.management.project.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,5 +18,8 @@ public class ProjectService {
 
     public Page<Project> findAllProjectPaginated(Integer page, Integer pageSize) {
         return this.projectRepository.findAllPaginated(PageRequest.of(page, pageSize, Sort.by("startDate").ascending()));
+    }
+    public Project findProjectById(Long id) {
+        return this.projectRepository.findById(id).orElseThrow(() -> new NotFoundException(AcademyClass.class, id));
     }
 }
