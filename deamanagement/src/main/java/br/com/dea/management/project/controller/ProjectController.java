@@ -1,8 +1,5 @@
 package br.com.dea.management.project.controller;
 
-import br.com.dea.management.academyclass.domain.AcademyClass;
-import br.com.dea.management.academyclass.dto.AcademyClassDto;
-import br.com.dea.management.academyclass.dto.CreateAcademyClassRequestDto;
 import br.com.dea.management.project.domain.Project;
 import br.com.dea.management.project.dto.CreateProjectRequestDto;
 import br.com.dea.management.project.dto.ProjectDto;
@@ -78,5 +75,21 @@ public class ProjectController {
         Project project = projectService.createProject(createProjectRequestDto);
 
         log.info(String.format("Project created successfully : id : %s", project.getId()));
+    }
+
+    @Operation(summary = "Delete a Project")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation"),
+            @ApiResponse(responseCode = "400", description = "Payload not valid"),
+            @ApiResponse(responseCode = "404", description = "Project not found"),
+            @ApiResponse(responseCode = "500", description = "Error deleting project"),
+    })
+    @DeleteMapping("/project/{id}")
+    public void deleteProject(@PathVariable Long id) {
+        log.info(String.format("Removing Project : Id : %s", id));
+
+        projectService.deleteProject(id);
+
+        log.info(String.format("Project removed successfully : id : %s", id));
     }
 }

@@ -45,4 +45,9 @@ public class ProjectService {
 
         return this.projectRepository.save(project);
     }
+
+    public void deleteProject(Long id) {
+        Project project = this.projectRepository.findById(id).orElseThrow(() -> new NotFoundException(Project.class, id));
+        this.projectRepository.delete(project);
+    }
 }
