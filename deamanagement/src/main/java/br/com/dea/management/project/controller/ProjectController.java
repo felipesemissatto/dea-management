@@ -3,6 +3,7 @@ package br.com.dea.management.project.controller;
 import br.com.dea.management.project.domain.Project;
 import br.com.dea.management.project.dto.CreateProjectRequestDto;
 import br.com.dea.management.project.dto.ProjectDto;
+import br.com.dea.management.project.dto.UpdateProjectRequestDto;
 import br.com.dea.management.project.service.ProjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -91,5 +92,20 @@ public class ProjectController {
         projectService.deleteProject(id);
 
         log.info(String.format("Project removed successfully : id : %s", id));
+    }
+    @Operation(summary = "Update a Project")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successful operation"),
+            @ApiResponse(responseCode = "400", description = "Payload not valid"),
+            @ApiResponse(responseCode = "404", description = "Project or employee not found"),
+            @ApiResponse(responseCode = "500", description = "Error updating project"),
+    })
+    @PutMapping("/project/{id}")
+    public void updateProject(@PathVariable Long id, @Valid @RequestBody UpdateProjectRequestDto updateProjectRequestDto) {
+        log.info(String.format("Updating Project : Payload : %s", updateProjectRequestDto));
+
+        Project project = projectService.updateProject(id, updateProjectRequestDto);
+
+        log.info(String.format("Project updated successfully : id : %s", project.getId()));
     }
 }

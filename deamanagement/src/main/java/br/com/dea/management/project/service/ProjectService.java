@@ -4,8 +4,10 @@ import br.com.dea.management.academyclass.domain.AcademyClass;
 import br.com.dea.management.employee.domain.Employee;
 import br.com.dea.management.employee.repository.EmployeeRepository;
 import br.com.dea.management.exceptions.NotFoundException;
+import br.com.dea.management.position.domain.Position;
 import br.com.dea.management.project.domain.Project;
 import br.com.dea.management.project.dto.CreateProjectRequestDto;
+import br.com.dea.management.project.dto.UpdateProjectRequestDto;
 import br.com.dea.management.project.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -49,5 +51,24 @@ public class ProjectService {
     public void deleteProject(Long id) {
         Project project = this.projectRepository.findById(id).orElseThrow(() -> new NotFoundException(Project.class, id));
         this.projectRepository.delete(project);
+    }
+
+    public Project updateProject(Long id, UpdateProjectRequestDto updateProjectRequestDto) {
+        Project project = this.projectRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(Project.class, id));
+        Employee productOwner = this.employeeRepository.findById(updateProjectRequestDto.getProductOwnerId())
+                .orElseThrow(() -> new NotFoundException(Employee.class, updateProjectRequestDto.getProductOwnerId()));
+        Employee scrumMaster = this.employeeRepository.findById(updateProjectRequestDto.getScrumMasterId())
+                .orElseThrow(() -> new NotFoundException(Employee.class, updateProjectRequestDto.getProductOwnerId()));
+
+        project.setName(updateProjectRequestDto.getName());
+        project.setClient(updateProjectRequestDto.getClient());
+        project.setExternalProductManager(updateProjectRequestDto.getExternalProductManager());
+        project.setStartDate(updateProjectRequestDto.getStartDate());
+        project.setEndDate(updateProjectRequestDto.getEndDate());
+        project.setProductOwner(productOwner);
+        project.setScrumMaster(scrumMaster);
+
+        return this.projectRepository.save(project);
     }
 }
